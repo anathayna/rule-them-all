@@ -12,6 +12,9 @@ interface ProductService {
     @Query(value = "select * from ProductCart")
     fun getAll(): List<ProductCart>
 
+    @Query(value = "select * from ProductCart where purchased=:purchased")
+    fun getProducts(purchased: Boolean = false): List<ProductCart>
+
     @Delete
     fun delete(note: ProductCart)
 

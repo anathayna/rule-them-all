@@ -7,7 +7,10 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.room.Room
 import br.fetter.rulethemall.R
+import br.fetter.rulethemall.model.ProductCart
+import br.fetter.rulethemall.service.AppDatabase
 import br.fetter.rulethemall.service.ProductService
 import kotlinx.android.synthetic.main.home_list.*
 import kotlinx.android.synthetic.main.product_card.view.*
@@ -27,10 +30,6 @@ class HomeListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.title = "Lista de produtos"
         setContentView(R.layout.home_list)
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
