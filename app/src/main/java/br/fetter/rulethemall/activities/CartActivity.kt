@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import br.fetter.rulethemall.R
-import br.fetter.rulethemall.model.Product
 import br.fetter.rulethemall.service.ProductService
 import kotlinx.android.synthetic.main.activity_cart.*
 import kotlinx.android.synthetic.main.home_list.*

@@ -8,7 +8,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import br.fetter.rulethemall.R
-import br.fetter.rulethemall.model.Product
 import br.fetter.rulethemall.service.ProductService
 import kotlinx.android.synthetic.main.home_list.*
 import kotlinx.android.synthetic.main.product_card.view.*
@@ -32,7 +31,6 @@ class HomeListActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        getProducts()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -47,48 +45,5 @@ class HomeListActivity : AppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun getProducts() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://oficinacordova.azurewebsites.net")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val service = retrofit.create(ProductService::class.java)
-        val call = service.list()
-
-        val callback = object : Callback<List<Product>> {
-
-            override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
-                if (response.isSuccessful) {
-                    updateScreen(response.body())
-                } else {
-                    Toast.makeText(this@HomeListActivity,
-                        "Não foi possivel atualizar produtos",
-                        Toast.LENGTH_LONG)
-                        .show()
-                    Log.e("ERRO_SERVICE", response.errorBody().toString())
-                }
-            }
-
-            override fun onFailure(call: Call<List<Product>>, t: Throwable) {
-                Toast.makeText(this@HomeListActivity,
-                    "Erro de conexão",
-                    Toast.LENGTH_LONG)
-                    .show()
-                Log.e("HomeListActivity", "getProducts",t)
-            }
-        }
-        call.enqueue(callback)
-    }
-
-    private  fun updateScreen(productList: List<Product>?) {
-        container.removeAllViews()
-        productList?.forEach { product ->
-            val card = layoutInflater.inflate(R.layout.product_card, container,false)
-            card.txtProductName.text = product.nomeProduto
-            card.txtPrice.text = formatter.format(product.precProduto)
-            container.addView(card)
-        }
     }
 }
