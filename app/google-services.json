@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "553221284363",
+    "firebase_url": "https://rule-them-all-1f6cf.firebaseio.com",
+    "project_id": "rule-them-all-1f6cf",
+    "storage_bucket": "rule-them-all-1f6cf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660448882242:android:902b09779aab79d23347db",
+        "android_client_info": {
+          "package_name": "br.fetter.rulethemall"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "660448882242-49db184hb34t7iqm4lt000l5jpsl3hph.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBarJA0BHVxdhVc0d4ZZBGZAv3bqrSLAj8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "660448882242-49db184hb34t7iqm4lt000l5jpsl3hph.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
