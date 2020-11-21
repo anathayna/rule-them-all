@@ -50,8 +50,7 @@ class StoreActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId == R.id.cart) {
-            val i = Intent(this, BuyActivity::class.java)
-            startActivity(i)
+
         }
         return super.onOptionsItemSelected(item)
     }
