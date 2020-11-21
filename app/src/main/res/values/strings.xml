@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Rule Them All</string>
+    <string name="product_name">Nome do produto</string>
+    <string name="price">Preço</string>
 </resources>
