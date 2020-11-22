@@ -5,4 +5,7 @@
     <string name="carrinho">carrinho</string>
     <string name="nome_do_produto">Nome do produto</string>
     <string name="qnt">qnt:</string>
+    <string name="meus_pedidos">meus pedidos</string>
+    <string name="sair">sair</string>
+    <string name="sobre">sobre</string>
 </resources>
