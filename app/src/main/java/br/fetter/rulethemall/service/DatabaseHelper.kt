@@ -55,5 +55,10 @@ class DatabaseHelper(context: Context) {
             val dao = instance.ProductService()
             dao.save(product)
         }
+
+        fun deleteProductOfCart(product: ProductCart) {
+            val dao = instance.ProductService()
+            dao.delete(product)
+        }
     }
 }

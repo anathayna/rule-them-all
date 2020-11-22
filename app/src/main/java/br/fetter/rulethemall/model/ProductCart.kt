@@ -9,11 +9,11 @@ import androidx.room.PrimaryKey
 data class ProductCart(
     @PrimaryKey(autoGenerate = true)
     val idProduto: Int? = null,
-    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-    val imageData: ByteArray? = null,
     val productName: String,
-    val productPrice: Double,
+    val unitPrice: Double,
+    var totalPrice: Double,
     val productDescription: String,
-    val quantity: Int,
-    val purchased: Boolean = false
+    var quantity: Int,
+    var purchased: Boolean = false,
+    val imageName: String
 )

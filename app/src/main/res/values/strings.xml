@@ -4,4 +4,5 @@
     <string name="price">Preço</string>
     <string name="carrinho">carrinho</string>
     <string name="nome_do_produto">Nome do produto</string>
+    <string name="qnt">qnt:</string>
 </resources>
