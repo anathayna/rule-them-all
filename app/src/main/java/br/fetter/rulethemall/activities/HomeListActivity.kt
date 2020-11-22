@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import br.fetter.rulethemall.R
 import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import java.text.NumberFormat
@@ -43,8 +44,10 @@ class HomeListActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == 0) {
+            val response = IdpResponse.fromResultIntent(data)
+
             if(resultCode == RESULT_OK) {
-                Toast.makeText(this, "yaaay authenticado", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "yaaay autenticado", Toast.LENGTH_LONG).show()
             } else {
                 finishAffinity()
             }
