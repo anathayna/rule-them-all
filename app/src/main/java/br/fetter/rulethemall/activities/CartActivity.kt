@@ -1,14 +1,12 @@
 package br.fetter.rulethemall.activities
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.room.Room
 import br.fetter.rulethemall.R
 import br.fetter.rulethemall.model.ProductCart
-import br.fetter.rulethemall.service.AppDatabase
+import br.fetter.rulethemall.service.DatabaseHelper
 import kotlinx.android.synthetic.main.home_list.container
 import kotlinx.android.synthetic.main.product_card_cart.view.*
 import java.text.NumberFormat
@@ -21,6 +19,7 @@ class CartActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.title = "Carrinho"
         setContentView(R.layout.activity_cart)
+        DatabaseHelper(this)
         getProducts()
     }
 
@@ -39,8 +38,7 @@ class CartActivity : AppCompatActivity() {
 
     private fun getProducts() {
         Thread {
-            val db = Room.databaseBuilder(this, AppDatabase::class.java, "AppDb").build()
-            val productCartList =  db.ProductService().getProducts()
+            val productCartList =  DatabaseHelper.getCartProducts()
             runOnUiThread {
                 updateScreen(productCartList)
             }
@@ -57,15 +55,10 @@ class CartActivity : AppCompatActivity() {
     }
 
     private fun createNewProducts() {
-        val newNote = ProductCart(nomeProduto = "sofa",precProduto = 200.89,descProduto = "um sofá legal",idCategoria = 2,qntCart = 4)
+        val newProduct = ProductCart(nomeProduto = "sofa", precProduto = 200.89, descProduto = "um sofá legal", idCategoria = 2, qntCart = 4)
         Thread {
-            saveProduct(newNote)
+            DatabaseHelper.addProductToCart(newProduct)
+            getProducts()
         }.start()
-    }
-
-    private fun saveProduct(newProduct: ProductCart) {
-        val db = Room.databaseBuilder(this, AppDatabase::class.java, "AppDb").build()
-        db.ProductService().save(newProduct)
-        getProducts()
     }
 }
