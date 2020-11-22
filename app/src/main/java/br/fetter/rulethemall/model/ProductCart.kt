@@ -13,7 +13,7 @@ data class ProductCart(
     val unitPrice: Double,
     var totalPrice: Double,
     val productDescription: String,
-    var quantity: Int,
+    var quantity: Int = 1,
     var purchased: Boolean = false,
     val imageName: String
 )

@@ -13,22 +13,23 @@ import androidx.room.Room
 import br.fetter.rulethemall.R
 import br.fetter.rulethemall.model.ProductCart
 import br.fetter.rulethemall.service.AppDatabase
+import br.fetter.rulethemall.service.DatabaseHelper
 import kotlinx.android.synthetic.main.activity_store.*
+import kotlinx.android.synthetic.main.product_card_cart.view.*
 
 class StoreActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_store)
-
-        val actionBar = supportActionBar
-        actionBar!!.title = "Carrinho"
-        actionBar.setDisplayHomeAsUpEnabled(true)
+        loadActionbar()
+        DatabaseHelper(this)
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
-        /*val nameP = intent.getStringExtra("")
-        val descP = intent.getStringExtra("")
-        val precP = intent.getDoubleExtra()*/
+        /*val nameProduct = intent.getStringExtra("name")
+        val descProduct = intent.getStringExtra("")
+        val priceProduct = intent.getDoubleExtra("")
+        val imageNameProduct = intent.getStringExtra("")*/
 
         txtNameP.setText("Tenis VANS")
         descP.setText("Um tenis maneiro pra um role de skate, demoro")
@@ -38,7 +39,7 @@ class StoreActivity : AppCompatActivity() {
 
         fab.setOnClickListener {
             AlertDialog.Builder(this)
-                .setTitle("Escolha a quantidade")
+                .setTitle("Deseja adicionar o produto ao carrinho?")
                 .setPositiveButton("Comprar") { dialog, button ->
                     //addProductCart()
                     Toast.makeText(this@StoreActivity, "Adicionado ao carrinho", Toast.LENGTH_SHORT).show()
@@ -50,9 +51,6 @@ class StoreActivity : AppCompatActivity() {
         }
     }
 
-    fun updateProductCart() {
-
-    }
 
     fun addProductCart(idProduto: Int?, nomeProduto: String, precProduto: Double, descProduto: String, qntCart: Int) {
         /*val db =
@@ -77,5 +75,11 @@ class StoreActivity : AppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun loadActionbar() {
+        val actionBar = supportActionBar
+        actionBar!!.title = "Adicionar ao Carrinho"
+        actionBar.setDisplayHomeAsUpEnabled(true)
     }
 }
