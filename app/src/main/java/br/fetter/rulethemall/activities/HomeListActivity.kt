@@ -7,7 +7,10 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.room.Room
 import br.fetter.rulethemall.R
+import br.fetter.rulethemall.model.ProductCart
+import br.fetter.rulethemall.service.AppDatabase
 import br.fetter.rulethemall.service.ProductService
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
@@ -63,10 +66,6 @@ class HomeListActivity : AppCompatActivity() {
     fun getCurrentUser(): FirebaseUser? {
         val auth = FirebaseAuth.getInstance()
         return auth.currentUser
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
