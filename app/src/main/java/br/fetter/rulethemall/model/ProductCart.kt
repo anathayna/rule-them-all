@@ -1,5 +1,7 @@
 package br.fetter.rulethemall.model
 
+import android.graphics.Bitmap
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -7,10 +9,11 @@ import androidx.room.PrimaryKey
 data class ProductCart(
     @PrimaryKey(autoGenerate = true)
     val idProduto: Int? = null,
-    val nomeProduto: String,
-    val precProduto: Double,
-    val descProduto: String,
-    val idCategoria: Int,
-    val qntCart: Int,
-    val purchased: Boolean = false,
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+    val imageData: ByteArray? = null,
+    val productName: String,
+    val productPrice: Double,
+    val productDescription: String,
+    val quantity: Int,
+    val purchased: Boolean = false
 )
