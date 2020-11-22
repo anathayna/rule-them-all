@@ -16,11 +16,11 @@ interface ProductService {
     fun getProducts(purchased: Boolean = false): List<ProductCart>
 
     @Delete
-    fun delete(note: ProductCart)
+    fun delete(product: ProductCart)
 
     @Query("SELECT * FROM ProductCart WHERE idProduto=:id")
     fun loadSingle(id: Int): ProductCart
 
     @Update
-    fun update(note: ProductCart)
+    fun update(product: ProductCart)
 }

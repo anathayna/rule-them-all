@@ -3,25 +3,13 @@ package br.fetter.rulethemall.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.room.Room
 import br.fetter.rulethemall.R
-import br.fetter.rulethemall.model.ProductCart
-import br.fetter.rulethemall.service.AppDatabase
-import br.fetter.rulethemall.service.ProductService
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.android.synthetic.main.home_list.*
-import kotlinx.android.synthetic.main.product_card.view.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.text.NumberFormat
 import java.util.*
 
