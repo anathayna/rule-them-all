@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.fetter.rulethemall.R
 import br.fetter.rulethemall.model.ProductCart
@@ -15,19 +16,23 @@ import kotlinx.android.synthetic.main.activity_cart.*
 import kotlinx.android.synthetic.main.home_list.container
 import kotlinx.android.synthetic.main.product_card_cart.view.*
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 
 class CartActivity : AppCompatActivity() {
     private val formatter: NumberFormat = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
-
     private var list_of_items = arrayOf("remover", "1 unidade", "2 unidades", "3 unidades", "4 unidades", "5 unidades")
+    private var productCartList: List<ProductCart>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.title = "Carrinho"
         setContentView(R.layout.activity_cart)
         DatabaseHelper(this)
+        btnBuy.setOnClickListener {
+            buyProducts()
+        }
         getProducts()
     }
 
@@ -46,9 +51,11 @@ class CartActivity : AppCompatActivity() {
 
     private fun getProducts() {
         Thread {
-            val productCartList =  DatabaseHelper.getCartProducts()
+            productCartList =  DatabaseHelper.getCartProducts()
             runOnUiThread {
-                updateScreen(productCartList)
+                productCartList?.let { products ->
+                    updateScreen(products)
+                }
             }
         }.start()
     }
@@ -123,5 +130,23 @@ class CartActivity : AppCompatActivity() {
             DatabaseHelper.addProductToCart(newProduct)
             getProducts()
         }.start()
+    }
+
+    private fun buyProducts() {
+        val sdf = SimpleDateFormat("dd/M/yyyy")
+        val currentDate = sdf.format(Date())
+        productCartList?.let { products ->
+            for (product in products) {
+                product.purchased = true
+                product.buyDate = currentDate
+            }
+            Thread {
+                DatabaseHelper.buyProducts(products)
+                runOnUiThread {
+                    Toast.makeText(this, "Compra realizada com sucesso", Toast.LENGTH_LONG).show()
+                    finish()
+                }
+            }.start()
+        }
     }
 }

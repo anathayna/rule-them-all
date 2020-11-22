@@ -60,5 +60,10 @@ class DatabaseHelper(context: Context) {
             val dao = instance.ProductService()
             dao.delete(product)
         }
+
+        fun buyProducts(products: List<ProductCart>) {
+            val dao = instance.ProductService()
+            dao.updateMany(products)
+        }
     }
 }
