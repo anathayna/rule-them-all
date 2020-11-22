@@ -8,27 +8,35 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:660448882242:android:902b09779aab79d23347db",
+        "mobilesdk_app_id": "1:553221284363:android:a526d2d6131b663f9e5d0e",
         "android_client_info": {
           "package_name": "br.fetter.rulethemall"
         }
       },
       "oauth_client": [
         {
-          "client_id": "660448882242-49db184hb34t7iqm4lt000l5jpsl3hph.apps.googleusercontent.com",
+          "client_id": "553221284363-cjhl19khftvh676oola1rtkk38iutp8u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.fetter.rulethemall",
+            "certificate_hash": "44ce8ba2099010d1522e1a9b9655f8dc984fdc8e"
+          }
+        },
+        {
+          "client_id": "553221284363-5glcdav2sh22dceo81hoeujat8392cvf.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBarJA0BHVxdhVc0d4ZZBGZAv3bqrSLAj8"
+          "current_key": "AIzaSyAjXuzFuf-aZ0PUPCSiVal0N2BntuV3mxU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "660448882242-49db184hb34t7iqm4lt000l5jpsl3hph.apps.googleusercontent.com",
+              "client_id": "553221284363-5glcdav2sh22dceo81hoeujat8392cvf.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
