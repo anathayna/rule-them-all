@@ -46,7 +46,7 @@ class DatabaseHelper(context: Context) {
             return dao.getProducts(purchased = true)
         }
 
-        fun editCartProduct(product: ProductCart){
+        fun editCartProduct(product: ProductCart) {
             val dao = instance.ProductService()
             dao.update(product)
         }
@@ -54,6 +54,11 @@ class DatabaseHelper(context: Context) {
         fun addProductToCart(product: ProductCart) {
             val dao = instance.ProductService()
             dao.save(product)
+        }
+
+        fun deleteProductOfCart(product: ProductCart) {
+            val dao = instance.ProductService()
+            dao.delete(product)
         }
     }
 }
