@@ -7,4 +7,15 @@
         android:icon="@drawable/ic_cart_white"
         android:title="@string/carrinho"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/menuMyOrders"
+        android:icon="@drawable/ic_round_menu_24"
+        android:title="@string/meus_pedidos" />
+    <item
+        android:id="@+id/menuAbout"
+        android:title="@string/sobre" />
+    <item
+        android:id="@+id/menuLogout"
+        android:icon="@drawable/ic_round_menu_24"
+        android:title="@string/sair" />
 </menu>
