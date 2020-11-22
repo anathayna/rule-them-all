@@ -66,7 +66,7 @@ class HomeListActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.cart) {
-            val intent = Intent(this, CartActivity::class.java)
+            val intent = Intent(this, StoreActivity::class.java)
             startActivity(intent)
             return true
         }
