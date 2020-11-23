@@ -3,6 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/id_store"
+        android:icon="@drawable/add"
+        android:title="store"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/cart"
         android:icon="@drawable/ic_cart_white"
         android:title="@string/carrinho"

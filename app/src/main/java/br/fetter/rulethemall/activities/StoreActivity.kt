@@ -18,30 +18,23 @@ import kotlinx.android.synthetic.main.activity_store.*
 import kotlinx.android.synthetic.main.product_card_cart.view.*
 
 class StoreActivity : AppCompatActivity() {
+
+    private var productImg: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_store)
         loadActionbar()
         DatabaseHelper(this)
-
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-
-        /*val nameProduct = intent.getStringExtra("name")
-        val descProduct = intent.getStringExtra("")
-        val priceProduct = intent.getDoubleExtra("")
-        val imageNameProduct = intent.getStringExtra("")*/
-
-        txtNameP.setText("Tenis VANS")
-        descP.setText("Um tenis maneiro pra um role de skate, demoro")
-        txtPriceP.setText("290,00")
-
-        val db = Room.databaseBuilder(this, AppDatabase::class.java, "AppDb").build()
+        setupLayout(intent)
 
         fab.setOnClickListener {
+            val i = Intent(this, CartActivity::class.java)
             AlertDialog.Builder(this)
                 .setTitle("Deseja adicionar o produto ao carrinho?")
                 .setPositiveButton("Comprar") { dialog, button ->
-                    //addProductCart()
+                    selectedProduct()
+                    //startActivity(i)
                     Toast.makeText(this@StoreActivity, "Adicionado ao carrinho", Toast.LENGTH_SHORT).show()
                 }
                 .setNegativeButton("Cancelar", null)
@@ -51,11 +44,31 @@ class StoreActivity : AppCompatActivity() {
         }
     }
 
+    fun setupLayout(intent: Intent) {
+        txtNameP.setText(intent.getStringExtra("productName"))
+        descP.setText(intent.getStringExtra("productDescription"))
+        txtPriceP.setText(intent.getStringExtra("price"))
+        productImg = intent.getStringExtra("imageName")
+        try {
+            val id: Int = this.resources.getIdentifier(productImg, "drawable", this.packageName)
+            imgP.setImageResource(id)
+        } catch (ex: Exception) {
+            imgP.setImageResource(R.drawable.placeholder_image)
+        }
+    }
 
-    fun addProductCart(idProduto: Int?, nomeProduto: String, precProduto: Double, descProduto: String, qntCart: Int) {
-        /*val db =
-            Room.databaseBuilder(this, AppDatabase::class.java, "AppDb").build()
-        db.ProductService()*/
+    fun selectedProduct() {
+        val Product = ProductCart(
+            productName = "Tênis Vans old school",
+            unitPrice = 200.00,
+            totalPrice = 200.00,
+            productDescription = "o melhor tenis que você pade querer está aqui",
+            quantity = 1,
+            imageName = "vans"
+        )
+        Thread {
+            DatabaseHelper.addProductToCart(Product)
+        }.start()
     }
 
     override fun onSupportNavigateUp(): Boolean {
