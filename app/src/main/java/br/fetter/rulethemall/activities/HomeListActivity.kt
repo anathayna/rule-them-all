@@ -141,6 +141,10 @@ class HomeListActivity : AppCompatActivity() {
             val intent = Intent(this, CartActivity::class.java)
             startActivity(intent)
             return true
+        } else if (item.itemId == R.id.menuMyOrders) {
+            val intent = Intent(this, LastOrdersActivity::class.java)
+            startActivity(intent)
+            return true
         }
         return super.onOptionsItemSelected(item)
     }

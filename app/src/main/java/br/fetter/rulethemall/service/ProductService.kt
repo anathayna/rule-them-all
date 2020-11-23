@@ -23,4 +23,7 @@ interface ProductService {
 
     @Update
     fun update(product: ProductCart)
+
+    @Update
+    fun updateMany(products: List<ProductCart>)
 }
