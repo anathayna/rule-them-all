@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.View.inflate
 import android.widget.Toast
 import androidx.core.content.res.ColorStateListInflaterCompat.inflate
@@ -21,10 +22,11 @@ import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.home_list.*
 import kotlinx.android.synthetic.main.product_card.view.*
 import kotlinx.android.synthetic.main.product_card.view.txtPrice
-import kotlinx.android.synthetic.main.product_card_cart.view.*
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.HashMap
+import com.facebook.shimmer.Shimmer
+import com.facebook.shimmer.ShimmerDrawable
 
 class HomeListActivity : AppCompatActivity() {
 
@@ -82,21 +84,48 @@ class HomeListActivity : AppCompatActivity() {
 
             val changeListener = object: ValueEventListener {
                 override fun onCancelled(databaseError: DatabaseError) {
+                    shimmer.stopShimmer()
+                    shimmer.visibility = View.GONE
+                    scrollView.visibility = View.VISIBLE
+
+                    scrollView.visibility = View.GONE
+                    shimmer.visibility = View.VISIBLE
+                    shimmer.startShimmer()
+
                     Log.w("HomeListActivity", "listener", databaseError.toException())
                     Toast.makeText(this@HomeListActivity, "falha na rede", Toast.LENGTH_LONG).show()
                 }
 
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    shimmer.stopShimmer()
+                    shimmer.visibility = View.GONE
+                    scrollView.visibility = View.VISIBLE
+
                     refreshUI(handleData(dataSnapshot))
                 }
             }
 
             database?.addValueEventListener(changeListener)
+
+            scrollView.visibility = View.GONE
+            shimmer.visibility = View.VISIBLE
+            shimmer.startShimmer()
         }
     }
 
     fun refreshUI(productList: List<ProductCart>) {
         container.removeAllViews()
+
+        val shimmer = Shimmer.AlphaHighlightBuilder()
+            .setDuration(800)
+            .setBaseAlpha(0.9f)
+            .setHighlightAlpha(0.7f)
+            .setDirection(Shimmer.Direction.LEFT_TO_RIGHT)
+            .setAutoStart(true)
+            .build()
+
+        val drawShimmer = ShimmerDrawable()
+        drawShimmer.setShimmer(shimmer)
 
         productList.forEach {
             val product = layoutInflater.inflate(R.layout.product_card, container, false)
