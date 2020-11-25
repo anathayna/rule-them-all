@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "553221284363",
+    "firebase_url": "https://rule-them-all-1f6cf.firebaseio.com",
+    "project_id": "rule-them-all-1f6cf",
+    "storage_bucket": "rule-them-all-1f6cf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553221284363:android:a526d2d6131b663f9e5d0e",
+        "android_client_info": {
+          "package_name": "br.fetter.rulethemall"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "553221284363-cjhl19khftvh676oola1rtkk38iutp8u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.fetter.rulethemall",
+            "certificate_hash": "44ce8ba2099010d1522e1a9b9655f8dc984fdc8e"
+          }
+        },
+        {
+          "client_id": "553221284363-5glcdav2sh22dceo81hoeujat8392cvf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjXuzFuf-aZ0PUPCSiVal0N2BntuV3mxU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "553221284363-5glcdav2sh22dceo81hoeujat8392cvf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
