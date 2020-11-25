@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.home_list.*
 import kotlinx.android.synthetic.main.product_card.view.*
+import kotlinx.android.synthetic.main.product_card.view.txtPrice
+import kotlinx.android.synthetic.main.product_card_cart.view.*
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -76,7 +78,7 @@ class HomeListActivity : AppCompatActivity() {
         val user = getCurrentUser()
 
         user?.let {
-            database = FirebaseDatabase.getInstance().reference.child("lista")
+            database = FirebaseDatabase.getInstance().reference.child("listas")
 
             val changeListener = object: ValueEventListener {
                 override fun onCancelled(databaseError: DatabaseError) {
@@ -101,6 +103,14 @@ class HomeListActivity : AppCompatActivity() {
 
             product.txtProductName.text = it.productName
             product.txtPrice.text = formatter.format(it.unitPrice)
+            product.txtCategoria.text = it.categoryName
+
+            try {
+                val id: Int = this.resources.getIdentifier(it.imageName, "drawable", this.packageName)
+                product.imgProduct.setImageResource(id)
+            } catch (ex: Exception) {
+                product.imgProduct.setImageResource(R.drawable.placeholder_image)
+            }
 
             container.addView(product)
         }
@@ -115,15 +125,15 @@ class HomeListActivity : AppCompatActivity() {
             val image = map.getValue("imageName") as String
             val desc = map.getValue("productDescription") as String
             val preco = map.getValue("unitPrice") as Double
+            val category = map.getValue("categoryName") as String
 
             val item = ProductCart(
                 productName = nome,
                 unitPrice = preco,
                 productDescription = desc,
-                imageName = image
+                imageName = image,
+                categoryName = category
             )
-
-            //val item = ProductCart(id, nome, preco, total, desc, quantity, purchased, image)
 
             product.add(item)
         }

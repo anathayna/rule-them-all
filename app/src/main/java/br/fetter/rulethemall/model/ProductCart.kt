@@ -16,5 +16,6 @@ data class ProductCart(
     var quantity: Int = 1,
     var purchased: Boolean = false,
     val imageName: String,
+    val categoryName: String? = "",
     var buyDate: String = "dd/MM/yyyy"
 )
