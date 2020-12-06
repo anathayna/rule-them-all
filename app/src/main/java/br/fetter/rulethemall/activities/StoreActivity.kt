@@ -1,6 +1,5 @@
 package br.fetter.rulethemall.activities
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -11,7 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.preference.PreferenceManager
 import androidx.room.Room
 import br.fetter.rulethemall.R
-import br.fetter.rulethemall.model.ProductCart
+import br.fetter.rulethemall.model.Order
 import br.fetter.rulethemall.service.AppDatabase
 import br.fetter.rulethemall.service.DatabaseHelper
 import kotlinx.android.synthetic.main.activity_store.*
@@ -58,7 +57,7 @@ class StoreActivity : AppCompatActivity() {
     }
 
     fun selectedProduct() {
-        val Product = ProductCart(
+        val Product = Order(
             productName = "Tênis Vans old school",
             unitPrice = 200.00,
             totalPrice = 200.00,

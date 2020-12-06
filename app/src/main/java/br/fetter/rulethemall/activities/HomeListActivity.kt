@@ -4,16 +4,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.View.inflate
 import android.widget.Toast
-import androidx.core.content.res.ColorStateListInflaterCompat.inflate
-import androidx.core.graphics.drawable.DrawableCompat.inflate
 import br.fetter.rulethemall.R
-import br.fetter.rulethemall.model.ProductCart
+import br.fetter.rulethemall.model.Order
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
@@ -38,7 +34,42 @@ class HomeListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.title = "Lista de produtos"
         setContentView(R.layout.home_list)
+        verifyUser()
+    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == 0) {
+            val response = IdpResponse.fromResultIntent(data)
+
+            if(resultCode == RESULT_OK) {
+                configureDatabase()
+            } else {
+                finishAffinity()
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.cart) {
+            val intent = Intent(this, CartActivity::class.java)
+            startActivity(intent)
+            return true
+        } else if (item.itemId == R.id.menuMyOrders) {
+            val intent = Intent(this, LastOrdersActivity::class.java)
+            startActivity(intent)
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    fun verifyUser() {
         if (getCurrentUser() == null) {
             val providers = arrayListOf(
                 AuthUI.IdpConfig.EmailBuilder().build(),
@@ -54,31 +85,15 @@ class HomeListActivity : AppCompatActivity() {
             )
         } else {
             configureDatabase()
-            Toast.makeText(this, "yaaay autenticado", Toast.LENGTH_LONG).show()
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == 0) {
-            val response = IdpResponse.fromResultIntent(data)
-
-            if(resultCode == RESULT_OK) {
-                configureDatabase()
-                Toast.makeText(this, "yaaay autenticado", Toast.LENGTH_LONG).show()
-            } else {
-                finishAffinity()
-            }
-        }
-    }
-
-    fun getCurrentUser(): FirebaseUser? {
+    private fun getCurrentUser(): FirebaseUser? {
         val auth = FirebaseAuth.getInstance()
         return auth.currentUser
     }
 
-    fun configureDatabase() {
+    private fun configureDatabase() {
         val user = getCurrentUser()
 
         user?.let {
@@ -115,7 +130,7 @@ class HomeListActivity : AppCompatActivity() {
         }
     }
 
-    fun refreshUI(productList: List<ProductCart>) {
+    fun refreshUI(productList: List<Order>) {
         container.removeAllViews()
 
         val shimmer = Shimmer.AlphaHighlightBuilder()
@@ -130,20 +145,20 @@ class HomeListActivity : AppCompatActivity() {
         drawShimmer.setShimmer(shimmer)
 
         productList.forEach {
-            val product = layoutInflater.inflate(R.layout.product_card, container, false)
+            val productCard = layoutInflater.inflate(R.layout.product_card, container, false)
 
-            product.txtProductName.text = it.productName
-            product.txtPrice.text = formatter.format(it.unitPrice)
-            product.txtCategoria.text = it.categoryName
+            productCard.txtProductName.text = it.productName
+            productCard.txtPrice.text = formatter.format(it.unitPrice)
+            productCard.txtCategoria.text = it.categoryName
 
             try {
                 val id: Int = this.resources.getIdentifier(it.imageName, "drawable", this.packageName)
-                product.imgProduct.setImageResource(id)
+                productCard.imgProduct.setImageResource(id)
             } catch (ex: Exception) {
-                product.imgProduct.setImageResource(R.drawable.placeholder_image)
+                productCard.imgProduct.setImageResource(R.drawable.placeholder_image)
             }
 
-            product.setOnClickListener {
+            productCard.setOnClickListener {
                 val intent = Intent(this, StoreActivity::class.java)
                 intent.putExtra("productName", "")
                 intent.putExtra("price", 250.00)
@@ -151,13 +166,12 @@ class HomeListActivity : AppCompatActivity() {
                 intent.putExtra("imageName", "vans")
                 startActivity(intent)
             }
-
-            container.addView(product)
+            container.addView(productCard)
         }
     }
 
-    fun handleData(dataSnapshot: DataSnapshot): List<ProductCart> {
-        val product = arrayListOf<ProductCart>()
+    fun handleData(dataSnapshot: DataSnapshot): List<Order> {
+        val product = arrayListOf<Order>()
 
         dataSnapshot.child("produtos").children.forEach {
             val map = it.value as HashMap<String, Any>
@@ -167,7 +181,7 @@ class HomeListActivity : AppCompatActivity() {
             val preco = map.getValue("unitPrice") as Double
             val category = map.getValue("categoryName") as String
 
-            val item = ProductCart(
+            val item = Order(
                 productName = nome,
                 unitPrice = preco,
                 productDescription = desc,
@@ -179,31 +193,5 @@ class HomeListActivity : AppCompatActivity() {
         }
 
         return product
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.cart) {
-            val intent = Intent(this, StoreActivity::class.java)
-            startActivity(intent)
-            return true
-        } else if (item.itemId == R.id.menuMyOrders) {
-            val intent = Intent(this, LastOrdersActivity::class.java)
-            startActivity(intent)
-            return true
-        } else if (item.itemId == R.id.id_store) {
-            val intent = Intent(this, StoreActivity::class.java)
-            intent.putExtra("productName", "tenis")
-            intent.putExtra("price", 250.00)
-            intent.putExtra("productDescription", "um tenis maneiro Vans")
-            intent.putExtra("imageName", "vans")
-            startActivity(intent)
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 }

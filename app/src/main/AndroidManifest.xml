@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,7 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activities.LastOrdersActivity"></activity>
-        <activity android:name=".activities.BuyActivity" />
         <activity android:name=".activities.StoreActivity" />
         <activity android:name=".activities.CartActivity" />
         <activity android:name=".activities.HomeListActivity">

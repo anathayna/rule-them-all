@@ -10,8 +10,11 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.fetter.rulethemall.R
-import br.fetter.rulethemall.model.ProductCart
-import br.fetter.rulethemall.service.DatabaseHelper
+import br.fetter.rulethemall.model.Order
+import br.fetter.rulethemall.service.room.DatabaseHelper
+import br.fetter.rulethemall.service.retrofit.ServiceApiHelper
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_cart.*
 import kotlinx.android.synthetic.main.home_list.container
 import kotlinx.android.synthetic.main.product_card_cart.view.*
@@ -23,17 +26,24 @@ import java.util.*
 class CartActivity : AppCompatActivity() {
     private val formatter: NumberFormat = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
     private var list_of_items = arrayOf("remover", "1 unidade", "2 unidades", "3 unidades", "4 unidades", "5 unidades")
-    private var productCartList: List<ProductCart>? = null
+    private var productCartList: List<Order>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.title = "Carrinho"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setContentView(R.layout.activity_cart)
         DatabaseHelper(this)
+        ServiceApiHelper()
         btnBuy.setOnClickListener {
             buyProducts()
         }
         getProducts()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -61,7 +71,7 @@ class CartActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private  fun updateScreen(productCartList: List<ProductCart>) {
+    private  fun updateScreen(productCartList: List<Order>) {
         container.removeAllViews()
         val totalOrder = getTotalOrderPrice(productCartList)
         txtTotalOrder.text = "total do pedido:  $totalOrder"
@@ -104,7 +114,7 @@ class CartActivity : AppCompatActivity() {
         }
     }
 
-    private fun getTotalOrderPrice(productCartList: List<ProductCart>): String {
+    private fun getTotalOrderPrice(productCartList: List<Order>): String {
         var totalPrice = 0
         for (product in productCartList) {
             totalPrice += ((product.totalPrice * 100).toInt())
@@ -113,12 +123,12 @@ class CartActivity : AppCompatActivity() {
         return formatter.format(totalPriceDouble)
     }
 
-    private fun getNewProductPrice(product: ProductCart, quantity: Int): Double {
+    private fun getNewProductPrice(product: Order, quantity: Int): Double {
         return (((product.unitPrice * 100).toInt() * quantity) / 100).toDouble()
     }
 
     private fun createNewProducts() {
-        val newProduct = ProductCart(
+        val newProduct = Order(
             productName = "Tênis Vans old school",
             unitPrice = 200.00,
             totalPrice = 800.00,
@@ -135,18 +145,36 @@ class CartActivity : AppCompatActivity() {
     private fun buyProducts() {
         val sdf = SimpleDateFormat("dd/M/yyyy")
         val currentDate = sdf.format(Date())
-        productCartList?.let { products ->
-            for (product in products) {
-                product.purchased = true
-                product.buyDate = currentDate
-            }
-            Thread {
-                DatabaseHelper.buyProducts(products)
-                runOnUiThread {
-                    Toast.makeText(this, "Compra realizada com sucesso", Toast.LENGTH_LONG).show()
-                    finish()
+        val user = getCurrentUser()
+        user?.let {
+            productCartList?.let { products ->
+                for (product in products) {
+                    product.buyDate = currentDate
                 }
-            }.start()
+                ServiceApiHelper.buyProducts(products, it.uid) { error ->
+                    if (error == null) {
+                        removeProductsFromCart(products)
+                    } else {
+                        Toast.makeText(this, error, Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
         }
+    }
+
+    private fun removeProductsFromCart(products: List<Order>) {
+        Thread {
+            DatabaseHelper.deleteProducts(products)
+            runOnUiThread {
+                Toast.makeText(this, "Compra realizada com sucesso", Toast.LENGTH_LONG)
+                    .show()
+                finish()
+            }
+        }.start()
+    }
+
+    private fun getCurrentUser(): FirebaseUser? {
+        val auth = FirebaseAuth.getInstance()
+        return auth.currentUser
     }
 }
