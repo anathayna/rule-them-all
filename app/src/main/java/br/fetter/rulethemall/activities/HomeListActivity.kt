@@ -143,6 +143,15 @@ class HomeListActivity : AppCompatActivity() {
                 product.imgProduct.setImageResource(R.drawable.placeholder_image)
             }
 
+            product.setOnClickListener {
+                val intent = Intent(this, StoreActivity::class.java)
+                intent.putExtra("productName", "")
+                intent.putExtra("price", 250.00)
+                intent.putExtra("productDescription", "um tenis maneiro Vans")
+                intent.putExtra("imageName", "vans")
+                startActivity(intent)
+            }
+
             container.addView(product)
         }
     }

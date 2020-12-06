@@ -34,7 +34,7 @@ class StoreActivity : AppCompatActivity() {
                 .setTitle("Deseja adicionar o produto ao carrinho?")
                 .setPositiveButton("Comprar") { dialog, button ->
                     selectedProduct()
-                    //startActivity(i)
+                    startActivity(i)
                     Toast.makeText(this@StoreActivity, "Adicionado ao carrinho", Toast.LENGTH_SHORT).show()
                 }
                 .setNegativeButton("Cancelar", null)
@@ -92,7 +92,7 @@ class StoreActivity : AppCompatActivity() {
 
     fun loadActionbar() {
         val actionBar = supportActionBar
-        actionBar!!.title = "Adicionar ao Carrinho"
+        actionBar!!.title = "Comprar"
         actionBar.setDisplayHomeAsUpEnabled(true)
     }
 }
