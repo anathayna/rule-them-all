@@ -1,14 +1,14 @@
-package br.fetter.rulethemall.service
+package br.fetter.rulethemall.service.room
 
 import android.content.Context
 import androidx.room.Room
-import br.fetter.rulethemall.model.ProductCart
+import br.fetter.rulethemall.model.Order
 import java.lang.ref.WeakReference
 
 class DatabaseHelper(context: Context) {
 
     init {
-        DatabaseHelper.context = WeakReference(context)
+        Companion.context = WeakReference(context)
     }
 
     companion object {
@@ -36,34 +36,29 @@ class DatabaseHelper(context: Context) {
                 return singleton as AppDatabase
             }
 
-        fun getCartProducts(): List<ProductCart> {
+        fun getCartProducts(): List<Order> {
             val dao = instance.ProductService()
             return dao.getProducts(purchased = false)
         }
 
-        fun getPurcheasedProducts(): List<ProductCart> {
-            val dao = instance.ProductService()
-            return dao.getProducts(purchased = true)
-        }
-
-        fun editCartProduct(product: ProductCart) {
+        fun editCartProduct(product: Order) {
             val dao = instance.ProductService()
             dao.update(product)
         }
 
-        fun addProductToCart(product: ProductCart) {
+        fun addProductToCart(product: Order) {
             val dao = instance.ProductService()
             dao.save(product)
         }
 
-        fun deleteProductOfCart(product: ProductCart) {
+        fun deleteProductOfCart(product: Order) {
             val dao = instance.ProductService()
             dao.delete(product)
         }
 
-        fun buyProducts(products: List<ProductCart>) {
+        fun deleteProducts(products: List<Order>) {
             val dao = instance.ProductService()
-            dao.updateMany(products)
+            dao.deleteAll(products)
         }
     }
 }
