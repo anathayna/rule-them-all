@@ -1,17 +1,12 @@
 package br.fetter.rulethemall.activities
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Spinner
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.room.Room
 import br.fetter.rulethemall.R
-import br.fetter.rulethemall.service.AppDatabase
-import kotlinx.android.synthetic.main.activity_store.*
+import br.fetter.rulethemall.service.room.AppDatabase
 
 class StoreActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
