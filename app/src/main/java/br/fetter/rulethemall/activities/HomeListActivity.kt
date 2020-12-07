@@ -8,12 +8,15 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import br.fetter.rulethemall.R
 import br.fetter.rulethemall.model.Order
+import br.fetter.rulethemall.service.room.DatabaseHelper
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.android.synthetic.main.product_card.*
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.home_list.*
 import kotlinx.android.synthetic.main.product_card.view.*
@@ -33,15 +36,19 @@ class HomeListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.title = "Lista de produtos"
         setContentView(R.layout.home_list)
-        verifyUser()
+        DatabaseHelper(this)
+        configureDataBase()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getProductsFormRoom()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == 0) {
-            val response = IdpResponse.fromResultIntent(data)
-
             if(resultCode == RESULT_OK) {
                 configureDatabase()
             } else {
@@ -68,11 +75,22 @@ class HomeListActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun verifyUser() {
+    private fun configureDataBase() {
+        Thread {
+            val values = DatabaseHelper.getHomeList()
+            DatabaseHelper.deleteProducts(values)
+            runOnUiThread {
+                verifyUser()
+            }
+        }.start()
+    }
+
+    private fun verifyUser() {
         if (getCurrentUser() == null) {
             val providers = arrayListOf(
                 AuthUI.IdpConfig.EmailBuilder().build(),
-                AuthUI.IdpConfig.GoogleBuilder().build())
+                AuthUI.IdpConfig.GoogleBuilder().build()
+            )
 
             startActivityForResult(
                 AuthUI.getInstance()
@@ -112,11 +130,7 @@ class HomeListActivity : AppCompatActivity() {
                 }
 
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    shimmer.stopShimmer()
-                    shimmer.visibility = View.GONE
-                    scrollView.visibility = View.VISIBLE
-
-                    refreshUI(handleData(dataSnapshot))
+                    saveProductsLocaly(handleData(dataSnapshot))
                 }
             }
 
@@ -126,6 +140,27 @@ class HomeListActivity : AppCompatActivity() {
             shimmer.visibility = View.VISIBLE
             shimmer.startShimmer()
         }
+    }
+
+    private fun saveProductsLocaly(productList: List<Order>) {
+        Thread {
+            DatabaseHelper.addProducts(productList)
+            runOnUiThread {
+                getProductsFormRoom()
+            }
+        }.start()
+    }
+
+    private fun getProductsFormRoom() {
+        Thread {
+            val products = DatabaseHelper.getHomeList()
+            runOnUiThread {
+                shimmer.stopShimmer()
+                shimmer.visibility = View.GONE
+                scrollView.visibility = View.VISIBLE
+                refreshUI(products)
+            }
+        }.start()
     }
 
     fun refreshUI(productList: List<Order>) {
@@ -142,20 +177,39 @@ class HomeListActivity : AppCompatActivity() {
         val drawShimmer = ShimmerDrawable()
         drawShimmer.setShimmer(shimmer)
 
-        productList.forEach {
+        productList.forEach { order ->
             val productCard = layoutInflater.inflate(R.layout.product_card, container, false)
 
-            productCard.txtProductName.text = it.productName
-            productCard.txtPrice.text = formatter.format(it.unitPrice)
-            productCard.txtCategoria.text = it.categoryName
+            productCard.txtProductName.text = order.productName
+            productCard.txtPrice.text = formatter.format(order.unitPrice)
+            productCard.txtCategoria.text = order.categoryName
 
             try {
-                val id: Int = this.resources.getIdentifier(it.imageName, "drawable", this.packageName)
+                val id: Int = this.resources.getIdentifier(order.imageName, "drawable", this.packageName)
                 productCard.imgProduct.setImageResource(id)
             } catch (ex: Exception) {
                 productCard.imgProduct.setImageResource(R.drawable.placeholder_image)
             }
 
+            productCard.setOnClickListener {
+                if (!order.onCart) {
+                    order.idProduto?.let { idOrder ->
+                        val intent = Intent(this, StoreActivity::class.java)
+                        intent.putExtra("idProduct", idOrder)
+                        startActivity(intent)
+                    }
+                } else {
+                    AlertDialog.Builder(this)
+                        .setTitle("Esta produto já se encontra no carrinho")
+                        .setNegativeButton("ir para o carrinho") { _, _ ->
+                            val intent = Intent(this, CartActivity::class.java)
+                            startActivity(intent)
+                        }
+                        .setPositiveButton("ok", null)
+                        .create()
+                        .show()
+                }
+            }
             container.addView(productCard)
         }
     }

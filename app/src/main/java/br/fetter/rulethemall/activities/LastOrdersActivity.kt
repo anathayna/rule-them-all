@@ -18,6 +18,7 @@ class LastOrdersActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.title = "Meus pedidos"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setContentView(R.layout.activity_last_orders)
         ServiceApiHelper()
     }
@@ -25,6 +26,11 @@ class LastOrdersActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         getLastOrders()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     private fun getLastOrders() {

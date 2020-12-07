@@ -1,9 +1,8 @@
 package br.fetter.rulethemall.activities
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -46,22 +45,9 @@ class CartActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_cart, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.addItem) {
-            createNewProducts()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     private fun getProducts() {
         Thread {
-            productCartList =  DatabaseHelper.getCartProducts()
+            productCartList =  DatabaseHelper.getCart()
             runOnUiThread {
                 productCartList?.let { products ->
                     updateScreen(products)
@@ -83,7 +69,7 @@ class CartActivity : AppCompatActivity() {
             aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             card.spinner_product.adapter = aa
             card.spinner_product.setSelection(product.quantity)
-                card.txtPrice.text = formatter.format(product.totalPrice)
+            card.txtPrice.text = formatter.format(product.totalPrice)
 
             card.spinner_product.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
@@ -127,21 +113,6 @@ class CartActivity : AppCompatActivity() {
         return (((product.unitPrice * 100).toInt() * quantity) / 100).toDouble()
     }
 
-    private fun createNewProducts() {
-        val newProduct = Order(
-            productName = "Tênis Vans old school",
-            unitPrice = 200.00,
-            totalPrice = 800.00,
-            productDescription = "o melhor tenis que você pade querer está aqui",
-            quantity = 4,
-            imageName = "vans"
-        )
-        Thread {
-            DatabaseHelper.addProductToCart(newProduct)
-            getProducts()
-        }.start()
-    }
-
     private fun buyProducts() {
         val sdf = SimpleDateFormat("dd/M/yyyy")
         val currentDate = sdf.format(Date())
@@ -168,6 +139,8 @@ class CartActivity : AppCompatActivity() {
             runOnUiThread {
                 Toast.makeText(this, "Compra realizada com sucesso", Toast.LENGTH_LONG)
                     .show()
+                val i = Intent(this, HomeListActivity::class.java)
+                startActivity(i)
                 finish()
             }
         }.start()
