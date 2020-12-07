@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Toast
 import br.fetter.rulethemall.R
 import br.fetter.rulethemall.model.Order
+import br.fetter.rulethemall.service.room.DatabaseHelper
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
@@ -34,7 +35,8 @@ class HomeListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.title = "Lista de produtos"
         setContentView(R.layout.home_list)
-        verifyUser()
+        DatabaseHelper(this)
+        configureDataBase()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -67,6 +69,18 @@ class HomeListActivity : AppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun configureDataBase() {
+        Thread {
+            val values = DatabaseHelper.getHomeList()
+            DatabaseHelper.deleteProducts(values)
+            runOnUiThread {
+                Toast.makeText(this, "DataBase limpo", Toast.LENGTH_LONG)
+                    .show()
+                verifyUser()
+            }
+        }.start()
     }
 
     fun verifyUser() {
@@ -118,7 +132,7 @@ class HomeListActivity : AppCompatActivity() {
                     shimmer.visibility = View.GONE
                     scrollView.visibility = View.VISIBLE
 
-                    refreshUI(handleData(dataSnapshot))
+                    saveProductsLocaly(handleData(dataSnapshot))
                 }
             }
 
@@ -128,6 +142,26 @@ class HomeListActivity : AppCompatActivity() {
             shimmer.visibility = View.VISIBLE
             shimmer.startShimmer()
         }
+    }
+
+    private fun saveProductsLocaly(productList: List<Order>) {
+        Thread {
+            DatabaseHelper.addProducts(productList)
+            runOnUiThread {
+                Toast.makeText(this, "produtos adicionados a base", Toast.LENGTH_LONG)
+                    .show()
+                getProductsFormRoom()
+            }
+        }.start()
+    }
+
+    private fun getProductsFormRoom() {
+        Thread {
+            val products = DatabaseHelper.getHomeList()
+            runOnUiThread {
+                refreshUI(products)
+            }
+        }.start()
     }
 
     fun refreshUI(productList: List<Order>) {
@@ -144,27 +178,26 @@ class HomeListActivity : AppCompatActivity() {
         val drawShimmer = ShimmerDrawable()
         drawShimmer.setShimmer(shimmer)
 
-        productList.forEach {
+        productList.forEach { order ->
             val productCard = layoutInflater.inflate(R.layout.product_card, container, false)
 
-            productCard.txtProductName.text = it.productName
-            productCard.txtPrice.text = formatter.format(it.unitPrice)
-            productCard.txtCategoria.text = it.categoryName
+            productCard.txtProductName.text = order.productName
+            productCard.txtPrice.text = formatter.format(order.unitPrice)
+            productCard.txtCategoria.text = order.categoryName
 
             try {
-                val id: Int = this.resources.getIdentifier(it.imageName, "drawable", this.packageName)
+                val id: Int = this.resources.getIdentifier(order.imageName, "drawable", this.packageName)
                 productCard.imgProduct.setImageResource(id)
             } catch (ex: Exception) {
                 productCard.imgProduct.setImageResource(R.drawable.placeholder_image)
             }
 
             productCard.setOnClickListener {
-                val intent = Intent(this, StoreActivity::class.java)
-                intent.putExtra("productName", "")
-                intent.putExtra("price", 250.00)
-                intent.putExtra("productDescription", "um tenis maneiro Vans")
-                intent.putExtra("imageName", "vans")
-                startActivity(intent)
+                order.idProduto?.let { idOrder ->
+                    val intent = Intent(this, StoreActivity::class.java)
+                    intent.putExtra("idProduct", idOrder)
+                    startActivity(intent)
+                }
             }
             container.addView(productCard)
         }

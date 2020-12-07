@@ -1,6 +1,7 @@
 package br.fetter.rulethemall.activities
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -61,7 +62,7 @@ class CartActivity : AppCompatActivity() {
 
     private fun getProducts() {
         Thread {
-            productCartList =  DatabaseHelper.getCartProducts()
+            productCartList =  DatabaseHelper.getCart()
             runOnUiThread {
                 productCartList?.let { products ->
                     updateScreen(products)
@@ -83,7 +84,7 @@ class CartActivity : AppCompatActivity() {
             aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             card.spinner_product.adapter = aa
             card.spinner_product.setSelection(product.quantity)
-                card.txtPrice.text = formatter.format(product.totalPrice)
+            card.txtPrice.text = formatter.format(product.totalPrice)
 
             card.spinner_product.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
@@ -168,6 +169,8 @@ class CartActivity : AppCompatActivity() {
             runOnUiThread {
                 Toast.makeText(this, "Compra realizada com sucesso", Toast.LENGTH_LONG)
                     .show()
+                val i = Intent(this, HomeListActivity::class.java)
+                startActivity(i)
                 finish()
             }
         }.start()

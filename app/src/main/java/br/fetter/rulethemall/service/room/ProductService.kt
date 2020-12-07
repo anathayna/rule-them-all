@@ -9,11 +9,14 @@ interface ProductService {
     @Insert
     fun save(product: Order)
 
+    @Insert
+    fun save(product: List<Order>)
+
     @Query(value = "select * from `Order`")
     fun getAll(): List<Order>
 
-    @Query(value = "select * from `Order` where purchased=:purchased")
-    fun getProducts(purchased: Boolean = false): List<Order>
+    @Query(value = "select * from `Order` where onCart=:onCart")
+    fun getCart(onCart: Boolean = true): List<Order>
 
     @Delete
     fun delete(product: Order)

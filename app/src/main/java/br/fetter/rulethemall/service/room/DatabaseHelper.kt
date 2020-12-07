@@ -36,19 +36,34 @@ class DatabaseHelper(context: Context) {
                 return singleton as AppDatabase
             }
 
-        fun getCartProducts(): List<Order> {
+        fun getCart(): List<Order> {
             val dao = instance.ProductService()
-            return dao.getProducts(purchased = false)
+            return dao.getCart()
+        }
+
+        fun getHomeList(): List<Order> {
+            val dao = instance.ProductService()
+            return dao.getAll()
+        }
+
+        fun getOrder(id: Int): Order {
+            val dao = instance.ProductService()
+            return dao.loadSingle(id)
+        }
+
+        fun addProductToCart(product: Order) {
+            val dao = instance.ProductService()
+            dao.update(product)
+        }
+
+        fun addProducts(products: List<Order>) {
+            val dao = instance.ProductService()
+            dao.save(products)
         }
 
         fun editCartProduct(product: Order) {
             val dao = instance.ProductService()
             dao.update(product)
-        }
-
-        fun addProductToCart(product: Order) {
-            val dao = instance.ProductService()
-            dao.save(product)
         }
 
         fun deleteProductOfCart(product: Order) {
