@@ -2,9 +2,12 @@ package br.fetter.rulethemall.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import br.fetter.rulethemall.R
 import br.fetter.rulethemall.model.Order
 import br.fetter.rulethemall.service.retrofit.ServiceApiHelper
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_cart.container
 import kotlinx.android.synthetic.main.activity_last_orders.*
 import kotlinx.android.synthetic.main.last_order_card.view.*
@@ -33,14 +36,25 @@ class LastOrdersActivity : AppCompatActivity() {
         return true
     }
 
+    private fun getCurrentUser(): FirebaseUser? {
+        val auth = FirebaseAuth.getInstance()
+        return auth.currentUser
+    }
+
     private fun getLastOrders() {
-        ServiceApiHelper.getProducts { result, error ->
-            result?.let { orders ->
-                val products = arrayListOf<Order>()
-                for (order in orders) {
-                    products.addAll(order.getList())
+        getCurrentUser()?.let { user ->
+            ServiceApiHelper.getProducts(user.uid) { result, error ->
+                error?.let { message ->
+                    Toast.makeText(this, message, Toast.LENGTH_LONG)
+                        .show()
                 }
-                updateScreen(products)
+                result?.let { orders ->
+                    val products = arrayListOf<Order>()
+                    for (order in orders) {
+                        products.addAll(order.getList())
+                    }
+                    updateScreen(products)
+                }
             }
         }
     }

@@ -9,14 +9,13 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import android.widget.SearchView
 import br.fetter.rulethemall.R
 import br.fetter.rulethemall.model.Order
 import br.fetter.rulethemall.service.room.DatabaseHelper
 import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.android.synthetic.main.product_card.*
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.home_list.*
 import kotlinx.android.synthetic.main.product_card.view.*
@@ -38,6 +37,7 @@ class HomeListActivity : AppCompatActivity() {
         setContentView(R.layout.home_list)
         DatabaseHelper(this)
         configureDataBase()
+        setupSearchBar()
     }
 
     override fun onResume() {
@@ -73,6 +73,34 @@ class HomeListActivity : AppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun setupSearchBar() {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                filterList(query)
+                return false
+            }
+            override fun onQueryTextChange(newText: String): Boolean {
+                if (newText == "") {
+                    getProductsFormRoom()
+                }
+                return false
+            }
+        })
+    }
+
+    private fun filterList(query: String) {
+        Thread {
+            val productsFilterdes = DatabaseHelper.filterByName(query)
+            runOnUiThread {
+                if (productsFilterdes.isEmpty()) {
+                    Toast.makeText(this, "Nenhum item encontrado", Toast.LENGTH_LONG).show()
+                } else {
+                    refreshUI(productsFilterdes)
+                }
+            }
+        }.start()
     }
 
     private fun configureDataBase() {
