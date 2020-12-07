@@ -14,7 +14,9 @@ class ServiceApiHelper {
 
     companion object {
 
-        fun getProducts(myCallback: (result: List<ListOrders>?, error: String?) -> Unit) {
+        private const val apiPath = "6c9da5397d534fbea6f00f797032cfe3"
+
+        fun getProducts(userUid: String, myCallback: (result: List<ListOrders>?, error: String?) -> Unit) {
             val clienteHttp = OkHttpClient.Builder()
                 .readTimeout(15, TimeUnit.SECONDS)
                 .connectTimeout(30, TimeUnit.SECONDS)
@@ -26,7 +28,7 @@ class ServiceApiHelper {
                 .client(clienteHttp)
                 .build()
             val service = retrofit.create(ProductServiceApi::class.java)
-            val call = service.list()
+            val call = service.list(apiPath, userUid)
             val callback = object: Callback<List<ListOrders>> {
                 override fun onResponse(call: Call<List<ListOrders>>, response: Response<List<ListOrders>>) {
                     if (response.isSuccessful) {
@@ -57,7 +59,7 @@ class ServiceApiHelper {
                 .build()
             val service = retrofit.create(ProductServiceApi::class.java)
 
-            val call = service.buyProducts(ListOrders(products))
+            val call = service.buyProducts(ListOrders(products), apiPath, userUid)
             val callback = object: Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {

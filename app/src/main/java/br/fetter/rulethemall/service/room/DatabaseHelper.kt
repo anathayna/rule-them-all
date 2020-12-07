@@ -75,5 +75,10 @@ class DatabaseHelper(context: Context) {
             val dao = instance.ProductService()
             dao.deleteAll(products)
         }
+
+        fun filterByName(query: String): List<Order> {
+            val dao = instance.ProductService()
+            return  dao.filterByName(query)
+        }
     }
 }

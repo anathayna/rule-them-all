@@ -27,6 +27,9 @@ interface ProductService {
     @Query("SELECT * FROM `Order` WHERE idProduto=:id")
     fun loadSingle(id: Int): Order
 
+    @Query("SELECT * FROM `Order` WHERE productName LIKE '%' || :query || '%' ")
+    fun filterByName(query: String): List<Order>
+
     @Update
     fun update(product: Order)
 
