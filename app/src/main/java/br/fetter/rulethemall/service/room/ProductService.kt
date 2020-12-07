@@ -30,6 +30,12 @@ interface ProductService {
     @Query("SELECT * FROM `Order` WHERE productName LIKE '%' || :query || '%' ")
     fun filterByName(query: String): List<Order>
 
+    @Query("SELECT * FROM `Order` WHERE productName LIKE '%' || :query || '%' AND categoryName LIKE :category")
+    fun filterByNameAndCategory(query: String, category: String): List<Order>
+
+    @Query("SELECT * FROM `Order` WHERE categoryName LIKE :category")
+    fun filterByCategory(category: String): List<Order>
+
     @Update
     fun update(product: Order)
 

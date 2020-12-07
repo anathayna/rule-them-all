@@ -80,5 +80,15 @@ class DatabaseHelper(context: Context) {
             val dao = instance.ProductService()
             return  dao.filterByName(query)
         }
+
+        fun filterByNameAndCategory(query: String, category: String): List<Order> {
+            val dao = instance.ProductService()
+            return  dao.filterByNameAndCategory(query, category)
+        }
+
+        fun filterByCategory(category: String): List<Order> {
+            val dao = instance.ProductService()
+            return  dao.filterByCategory(category)
+        }
     }
 }

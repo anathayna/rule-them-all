@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import android.widget.SearchView
@@ -25,10 +27,16 @@ import java.util.*
 import kotlin.collections.HashMap
 import com.facebook.shimmer.Shimmer
 import com.facebook.shimmer.ShimmerDrawable
+import kotlinx.android.synthetic.main.product_card_cart.view.*
 
 class HomeListActivity : AppCompatActivity() {
 
     private val formatter: NumberFormat = NumberFormat.getCurrencyInstance(Locale("pt","BR"))
+    private val categorys = arrayOf("todos", "decoração", "livros", "outros", "filmes", "vestuário")
+    private var mainQuery = ""
+    private var mainCategory = categorys[0]
+
+
     var database: DatabaseReference? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +46,7 @@ class HomeListActivity : AppCompatActivity() {
         DatabaseHelper(this)
         configureDataBase()
         setupSearchBar()
+        setupSpinner()
     }
 
     override fun onResume() {
@@ -75,24 +84,50 @@ class HomeListActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun setupSpinner() {
+        val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, categorys)
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerCategory.adapter = aa
+        spinnerCategory.setSelection(0)
+        spinnerCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                mainCategory = categorys[position]
+                filter()
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+    }
+
     private fun setupSearchBar() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                filterList(query)
+                mainQuery = query
+                filter()
                 return false
             }
             override fun onQueryTextChange(newText: String): Boolean {
                 if (newText == "") {
-                    getProductsFormRoom()
+                    mainQuery = ""
+                    filter()
                 }
                 return false
             }
         })
     }
 
-    private fun filterList(query: String) {
+    private fun filter() {
         Thread {
-            val productsFilterdes = DatabaseHelper.filterByName(query)
+            var productsFilterdes: List<Order>?
+            if (mainQuery.isNotEmpty() && mainCategory == categorys[0]) {
+                productsFilterdes = DatabaseHelper.filterByName(mainQuery)
+            } else if (mainQuery.isNotEmpty() && mainCategory != categorys[0]) {
+                productsFilterdes = DatabaseHelper.filterByNameAndCategory(mainQuery, mainCategory)
+            } else if (mainQuery.isEmpty() && mainCategory != categorys[0]) {
+                productsFilterdes = DatabaseHelper.filterByCategory(mainCategory)
+            } else {
+                productsFilterdes = DatabaseHelper.getHomeList()
+            }
+
             runOnUiThread {
                 if (productsFilterdes.isEmpty()) {
                     Toast.makeText(this, "Nenhum item encontrado", Toast.LENGTH_LONG).show()
