@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import br.fetter.rulethemall.R
 import br.fetter.rulethemall.model.Order
 import br.fetter.rulethemall.service.room.DatabaseHelper
@@ -39,12 +40,15 @@ class HomeListActivity : AppCompatActivity() {
         configureDataBase()
     }
 
+    override fun onResume() {
+        super.onResume()
+        getProductsFormRoom()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == 0) {
-            val response = IdpResponse.fromResultIntent(data)
-
             if(resultCode == RESULT_OK) {
                 configureDatabase()
             } else {
@@ -76,14 +80,12 @@ class HomeListActivity : AppCompatActivity() {
             val values = DatabaseHelper.getHomeList()
             DatabaseHelper.deleteProducts(values)
             runOnUiThread {
-                Toast.makeText(this, "DataBase limpo", Toast.LENGTH_LONG)
-                    .show()
                 verifyUser()
             }
         }.start()
     }
 
-    fun verifyUser() {
+    private fun verifyUser() {
         if (getCurrentUser() == null) {
             val providers = arrayListOf(
                 AuthUI.IdpConfig.EmailBuilder().build(),
@@ -128,10 +130,6 @@ class HomeListActivity : AppCompatActivity() {
                 }
 
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    shimmer.stopShimmer()
-                    shimmer.visibility = View.GONE
-                    scrollView.visibility = View.VISIBLE
-
                     saveProductsLocaly(handleData(dataSnapshot))
                 }
             }
@@ -148,8 +146,6 @@ class HomeListActivity : AppCompatActivity() {
         Thread {
             DatabaseHelper.addProducts(productList)
             runOnUiThread {
-                Toast.makeText(this, "produtos adicionados a base", Toast.LENGTH_LONG)
-                    .show()
                 getProductsFormRoom()
             }
         }.start()
@@ -159,6 +155,9 @@ class HomeListActivity : AppCompatActivity() {
         Thread {
             val products = DatabaseHelper.getHomeList()
             runOnUiThread {
+                shimmer.stopShimmer()
+                shimmer.visibility = View.GONE
+                scrollView.visibility = View.VISIBLE
                 refreshUI(products)
             }
         }.start()
@@ -193,10 +192,22 @@ class HomeListActivity : AppCompatActivity() {
             }
 
             productCard.setOnClickListener {
-                order.idProduto?.let { idOrder ->
-                    val intent = Intent(this, StoreActivity::class.java)
-                    intent.putExtra("idProduct", idOrder)
-                    startActivity(intent)
+                if (!order.onCart) {
+                    order.idProduto?.let { idOrder ->
+                        val intent = Intent(this, StoreActivity::class.java)
+                        intent.putExtra("idProduct", idOrder)
+                        startActivity(intent)
+                    }
+                } else {
+                    AlertDialog.Builder(this)
+                        .setTitle("Esta produto já se encontra no carrinho")
+                        .setNegativeButton("ir para o carrinho") { _, _ ->
+                            val intent = Intent(this, CartActivity::class.java)
+                            startActivity(intent)
+                        }
+                        .setPositiveButton("ok", null)
+                        .create()
+                        .show()
                 }
             }
             container.addView(productCard)

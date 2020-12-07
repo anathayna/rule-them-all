@@ -3,8 +3,6 @@ package br.fetter.rulethemall.activities
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -45,19 +43,6 @@ class CartActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_cart, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.addItem) {
-            createNewProducts()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun getProducts() {
@@ -126,21 +111,6 @@ class CartActivity : AppCompatActivity() {
 
     private fun getNewProductPrice(product: Order, quantity: Int): Double {
         return (((product.unitPrice * 100).toInt() * quantity) / 100).toDouble()
-    }
-
-    private fun createNewProducts() {
-        val newProduct = Order(
-            productName = "Tênis Vans old school",
-            unitPrice = 200.00,
-            totalPrice = 800.00,
-            productDescription = "o melhor tenis que você pade querer está aqui",
-            quantity = 4,
-            imageName = "vans"
-        )
-        Thread {
-            DatabaseHelper.addProductToCart(newProduct)
-            getProducts()
-        }.start()
     }
 
     private fun buyProducts() {
