@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rule Them All</string>
+    <string name="meus_pedidos">my orders</string>
+    <string name="sair">logOut</string>
+    <string name="sobre">about</string>
+    <string name="productList">Product list</string>
+    <string name="searchHint">search by name</string>
+    <string name="category">Category: </string>
+    <string name="onCart">This product is already in the cart</string>
+    <string name="goToCart">go to checkout</string>
+    <string name="ok">ok</string>
+    <string name="product">Product</string>
+    <string name="addToCart">Do you want to add this product to cart?</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">yes</string>
+    <string name="checkout">Checkout</string>
+    <string name="buy">BUY</string>
+    <string name="buyOK">purchase made</string>
+    <string name="totalOrder">total order: </string>
+    <string name="dueDate">purchase date: </string>
+</resources>
