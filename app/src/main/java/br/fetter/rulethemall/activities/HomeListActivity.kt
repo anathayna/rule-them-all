@@ -80,6 +80,9 @@ class HomeListActivity : AppCompatActivity() {
             val intent = Intent(this, LastOrdersActivity::class.java)
             startActivity(intent)
             return true
+        } else if (item.itemId == R.id.menuLogout) {
+            logOut()
+            return true
         }
         return super.onOptionsItemSelected(item)
     }
@@ -129,7 +132,7 @@ class HomeListActivity : AppCompatActivity() {
             }
 
             runOnUiThread {
-                if (productsFilterdes.isEmpty()) {
+                if (productsFilterdes.isNullOrEmpty()) {
                     Toast.makeText(this, "Nenhum item encontrado", Toast.LENGTH_LONG).show()
                 } else {
                     refreshUI(productsFilterdes)
@@ -148,23 +151,39 @@ class HomeListActivity : AppCompatActivity() {
         }.start()
     }
 
+    private fun callLogin() {
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build()
+        )
+
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .setLogo(R.drawable.ic_user_login_default)
+                .build(), 0
+        )
+    }
+
     private fun verifyUser() {
         if (getCurrentUser() == null) {
-            val providers = arrayListOf(
-                AuthUI.IdpConfig.EmailBuilder().build(),
-                AuthUI.IdpConfig.GoogleBuilder().build()
-            )
-
-            startActivityForResult(
-                AuthUI.getInstance()
-                    .createSignInIntentBuilder()
-                    .setAvailableProviders(providers)
-                    .setLogo(R.drawable.ic_user_login_default)
-                    .build(), 0
-            )
+            callLogin()
         } else {
             configureDatabase()
         }
+    }
+
+    private fun logOut() {
+        if (getCurrentUser() != null) {
+            AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener {
+                    Toast.makeText(this, "saiu", Toast.LENGTH_LONG).show()
+                }
+        }
+
+        callLogin()
     }
 
     private fun getCurrentUser(): FirebaseUser? {
