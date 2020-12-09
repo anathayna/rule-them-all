@@ -41,7 +41,7 @@ class AboutActivity : AppCompatActivity() {
     fun sendEmail(id: Int) {
         if (id == 1) {
             val sendIntent: Intent = Intent().apply {
-                action = Intent.ACTION_SEND
+                action = Intent.ACTION_SENDTO
                 putExtra(Intent.EXTRA_EMAIL, "anathaynafranca@gmail.com")
                 putExtra(Intent.EXTRA_SUBJECT, "Tenho uma sugestão para o app")
                 type = "text/plain"
