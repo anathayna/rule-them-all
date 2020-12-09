@@ -27,7 +27,6 @@ import java.util.*
 import kotlin.collections.HashMap
 import com.facebook.shimmer.Shimmer
 import com.facebook.shimmer.ShimmerDrawable
-import kotlinx.android.synthetic.main.product_card_cart.view.*
 
 class HomeListActivity : AppCompatActivity() {
 
@@ -264,7 +263,7 @@ class HomeListActivity : AppCompatActivity() {
 
             productCard.txtProductName.text = order.productName
             productCard.txtPrice.text = formatter.format(order.unitPrice)
-            productCard.txtCategoria.text = order.categoryName
+            productCard.txtCategory.text = order.categoryName
 
             try {
                 val id: Int = this.resources.getIdentifier(order.imageName, "drawable", this.packageName)
