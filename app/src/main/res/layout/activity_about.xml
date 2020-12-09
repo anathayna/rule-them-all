@@ -112,7 +112,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:text="nt.mattheus@gmail.com"
+            android:text="mathias21novaes@gmail.com"
             android:textAlignment="center"
             android:textSize="16sp"
             android:textStyle="italic" />

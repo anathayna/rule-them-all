@@ -43,8 +43,8 @@ class AboutActivity : AppCompatActivity() {
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_EMAIL, "anathaynafranca@gmail.com")
-                putExtra(Intent.EXTRA_TEXT, "Tenho uma sugestão para o app")
-                //type = "text/plain"
+                putExtra(Intent.EXTRA_SUBJECT, "Tenho uma sugestão para o app")
+                type = "text/plain"
             }
             val shareIntent = Intent.createChooser(sendIntent, null)
             startActivity(shareIntent)
@@ -52,8 +52,8 @@ class AboutActivity : AppCompatActivity() {
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_EMAIL, "fetter.marcio@gmail.com")
-                putExtra(Intent.EXTRA_TEXT, "Tenho uma sugestão para o app")
-                //type = "text/plain"
+                putExtra(Intent.EXTRA_SUBJECT, "Tenho uma sugestão para o app")
+                type = "text/plain"
             }
             val shareIntent = Intent.createChooser(sendIntent, null)
             startActivity(shareIntent)
@@ -61,8 +61,8 @@ class AboutActivity : AppCompatActivity() {
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_EMAIL, "mathias21novaes@gmail.com")
-                putExtra(Intent.EXTRA_TEXT, "Tenho uma sugestão para o app")
-                //type = "text/plain"
+                putExtra(Intent.EXTRA_SUBJECT, "Tenho uma sugestão para o app")
+                type = "text/plain"
             }
             val shareIntent = Intent.createChooser(sendIntent, null)
             startActivity(shareIntent)
