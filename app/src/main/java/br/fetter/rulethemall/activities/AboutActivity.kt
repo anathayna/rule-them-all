@@ -44,18 +44,28 @@ class AboutActivity : AppCompatActivity() {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_EMAIL, "anathaynafranca@gmail.com")
                 putExtra(Intent.EXTRA_TEXT, "Tenho uma sugestão para o app")
-                type = "text/plain"
+                //type = "text/plain"
             }
             val shareIntent = Intent.createChooser(sendIntent, null)
             startActivity(shareIntent)
         } else if (id == 2) {
-
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_EMAIL, "fetter.marcio@gmail.com")
+                putExtra(Intent.EXTRA_TEXT, "Tenho uma sugestão para o app")
+                //type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
         } else {
-
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_EMAIL, "mathias21novaes@gmail.com")
+                putExtra(Intent.EXTRA_TEXT, "Tenho uma sugestão para o app")
+                //type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
         }
     }
 }
-
-Intent intent = new Intent(Intent.ACTION_VIEW);
-intent.setData(Uri.parse("mailto:" + url));
-startActivity(intent);
