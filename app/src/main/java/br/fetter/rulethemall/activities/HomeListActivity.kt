@@ -281,7 +281,7 @@ class HomeListActivity : AppCompatActivity() {
                 } else {
                     AlertDialog.Builder(this)
                         .setTitle(getString(R.string.onCart))
-                        .setNegativeButton(getString(R.string.onCart)) { _, _ ->
+                        .setNegativeButton(getString(R.string.goToCart)) { _, _ ->
                             val intent = Intent(this, CartActivity::class.java)
                             startActivity(intent)
                         }
