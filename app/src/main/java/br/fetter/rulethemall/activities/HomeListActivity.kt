@@ -59,7 +59,7 @@ class HomeListActivity : AppCompatActivity() {
 
         if(requestCode == 0) {
             if(resultCode == RESULT_OK) {
-                configureDatabase()
+                configureFirebase()
             } else {
                 finishAffinity()
             }
@@ -170,7 +170,7 @@ class HomeListActivity : AppCompatActivity() {
         if (getCurrentUser() == null) {
             callLogin()
         } else {
-            configureDatabase()
+            configureFirebase()
         }
     }
 
@@ -191,7 +191,7 @@ class HomeListActivity : AppCompatActivity() {
         return auth.currentUser
     }
 
-    private fun configureDatabase() {
+    private fun configureFirebase() {
         val user = getCurrentUser()
 
         user?.let {
