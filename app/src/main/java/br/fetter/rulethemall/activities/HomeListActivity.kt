@@ -41,7 +41,7 @@ class HomeListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportActionBar?.title = "Lista de produtos"
+        supportActionBar?.title = getString(R.string.productList)
         setContentView(R.layout.home_list)
         DatabaseHelper(this)
         configureDataBase()
@@ -132,9 +132,8 @@ class HomeListActivity : AppCompatActivity() {
             }
 
             runOnUiThread {
-                if (productsFilterdes.isNullOrEmpty()) {
-                    Toast.makeText(this, "Nenhum item encontrado", Toast.LENGTH_LONG).show()
-                } else {
+                refreshUI(productsFilterdes)
+                if (!productsFilterdes.isNullOrEmpty()) {
                     refreshUI(productsFilterdes)
                 }
             }
@@ -282,12 +281,12 @@ class HomeListActivity : AppCompatActivity() {
                     }
                 } else {
                     AlertDialog.Builder(this)
-                        .setTitle("Esta produto já se encontra no carrinho")
-                        .setNegativeButton("ir para o carrinho") { _, _ ->
+                        .setTitle(getString(R.string.onCart))
+                        .setNegativeButton(getString(R.string.onCart)) { _, _ ->
                             val intent = Intent(this, CartActivity::class.java)
                             startActivity(intent)
                         }
-                        .setPositiveButton("ok", null)
+                        .setPositiveButton(getString(R.string.ok), null)
                         .create()
                         .show()
                 }
