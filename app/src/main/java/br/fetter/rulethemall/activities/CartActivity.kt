@@ -65,6 +65,7 @@ class CartActivity : AppCompatActivity() {
         for (product in productCartList) {
             val card = layoutInflater.inflate(R.layout.product_card_cart, container, false)
             card.txtCartProductName.text = product.productName
+            card.txtCategory.text = product.categoryName
             val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, list_of_items)
             aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             card.spinner_product.adapter = aa
