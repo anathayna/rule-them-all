@@ -39,7 +39,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="32dp"
-            android:text="Projeto desenvolvido para avaliação da disciplina: Programação de Dispositivos Móveis ministrado por Fábio Abeza - 6 Semestre do curso de Ciência da Computação"
+            android:text="@string/about_text"
             android:textAlignment="center"
             android:textSize="20sp" />
 
@@ -51,7 +51,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginRight="32dp"
             android:layout_marginBottom="8dp"
-            android:text="App desenvolvido por:"
+            android:text="@string/app_desenvolvido_por"
             android:textAlignment="center"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -124,7 +124,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="30dp"
             android:layout_marginRight="16dp"
-            android:text="ACESSE O SENAC"
+            android:text="@string/acesse_o_senac"
             android:textSize="16sp"
             android:textStyle="bold" />
 

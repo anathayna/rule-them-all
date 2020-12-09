@@ -22,4 +22,7 @@
     <string name="buyOK">compra realizada</string>
     <string name="totalOrder">total do pedido: </string>
     <string name="dueDate">data da compra: </string>
+    <string name="about_text">Projeto desenvolvido para avaliação da disciplina: Programação de Dispositivos Móveis ministrado por Fábio Abeza - 6 Semestre do curso de Ciência da Computação</string>
+    <string name="app_desenvolvido_por">App desenvolvido por:</string>
+    <string name="acesse_o_senac">ACESSE O SENAC</string>
 </resources>
