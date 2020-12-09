@@ -65,7 +65,7 @@ class LastOrdersActivity : AppCompatActivity() {
             val card = layoutInflater.inflate(R.layout.last_order_card, container, false)
             card.txtProductName.text = product.productName
             card.txtTotalPrice.text = "total "+ formatter.format(product.totalPrice)
-            card.txtBuyDate.text = getString(R.string.dueDate) + product.buyDate
+            card.txtBuyDate.text = getString(R.string.dueDate)+ " " + product.buyDate
             try {
                 val id: Int = this.resources.getIdentifier(product.imageName, "drawable", this.packageName)
                 card.imgOrder.setImageResource(id)
