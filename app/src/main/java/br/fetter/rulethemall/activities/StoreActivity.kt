@@ -42,6 +42,10 @@ class StoreActivity : AppCompatActivity() {
             val i = Intent(this, CartActivity::class.java)
             startActivity(i)
             return true
+        } else if (item.itemId == R.id.menuAbout) {
+            val intent = Intent(this, AboutActivity::class.java)
+            startActivity(intent)
+            return true
         }
         return super.onOptionsItemSelected(item)
     }
