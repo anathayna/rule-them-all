@@ -33,12 +33,12 @@ class StoreActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
+        menuInflater.inflate(R.menu.menu_store, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.cart) {
+        if(item.itemId == R.id.cartStore) {
             val i = Intent(this, CartActivity::class.java)
             startActivity(i)
             return true
@@ -73,11 +73,11 @@ class StoreActivity : AppCompatActivity() {
     private fun setupFab() {
         fab.setOnClickListener {
             AlertDialog.Builder(this)
-                .setTitle("Deseja adicionar o produto ao carrinho?")
-                .setPositiveButton("Sim") { dialog, button ->
+                .setTitle(getString(R.string.addToCart))
+                .setPositiveButton(getString(R.string.yes)) { dialog, button ->
                     addProductToCart()
                 }
-                .setNegativeButton("Cancelar", null)
+                .setNegativeButton(getString(R.string.cancel), null)
                 .create()
                 .show()
         }
@@ -98,9 +98,8 @@ class StoreActivity : AppCompatActivity() {
         }
     }
 
-    fun loadActionbar() {
-        val actionBar = supportActionBar
-        actionBar!!.title = "Comprar"
-        actionBar.setDisplayHomeAsUpEnabled(true)
+    private fun loadActionbar() {
+        supportActionBar?.title = getString(R.string.product)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 }

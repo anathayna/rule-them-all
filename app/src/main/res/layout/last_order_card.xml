@@ -30,7 +30,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:text="@string/nome_do_produto"
-                android:textColor="#3F51B5"
+                android:textColor="#000000"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -42,7 +42,8 @@
                 android:layout_weight="1"
                 android:text="Total R$ 500,78"
                 android:textColor="#000000"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                android:textStyle="italic" />
 
             <TextView
                 android:id="@+id/txtBuyDate"
@@ -50,7 +51,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:text="Data da compra 12/10/20" />
+                android:text="Data da compra 12/10/20"
+                android:textStyle="italic" />
         </LinearLayout>
 
     </LinearLayout>

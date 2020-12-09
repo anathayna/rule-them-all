@@ -27,7 +27,6 @@ import java.util.*
 import kotlin.collections.HashMap
 import com.facebook.shimmer.Shimmer
 import com.facebook.shimmer.ShimmerDrawable
-import kotlinx.android.synthetic.main.product_card_cart.view.*
 
 class HomeListActivity : AppCompatActivity() {
 
@@ -41,7 +40,7 @@ class HomeListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportActionBar?.title = "Lista de produtos"
+        supportActionBar?.title = getString(R.string.productList)
         setContentView(R.layout.home_list)
         DatabaseHelper(this)
         configureDataBase()
@@ -59,7 +58,7 @@ class HomeListActivity : AppCompatActivity() {
 
         if(requestCode == 0) {
             if(resultCode == RESULT_OK) {
-                configureDatabase()
+                configureFirebase()
             } else {
                 finishAffinity()
             }
@@ -83,6 +82,8 @@ class HomeListActivity : AppCompatActivity() {
         } else if (item.itemId == R.id.menuAbout) {
             val intent = Intent(this, AboutActivity::class.java)
             startActivity(intent)
+        } else if (item.itemId == R.id.menuLogout) {
+            logOut()
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -133,9 +134,8 @@ class HomeListActivity : AppCompatActivity() {
             }
 
             runOnUiThread {
-                if (productsFilterdes.isEmpty()) {
-                    Toast.makeText(this, "Nenhum item encontrado", Toast.LENGTH_LONG).show()
-                } else {
+                refreshUI(productsFilterdes)
+                if (!productsFilterdes.isNullOrEmpty()) {
                     refreshUI(productsFilterdes)
                 }
             }
@@ -154,23 +154,39 @@ class HomeListActivity : AppCompatActivity() {
         }.start()
     }
 
+    private fun callLogin() {
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build()
+        )
+
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .setLogo(R.drawable.ic_user_login_default)
+                .build(), 0
+        )
+    }
+
     private fun verifyUser() {
         if (getCurrentUser() == null) {
-            val providers = arrayListOf(
-                AuthUI.IdpConfig.EmailBuilder().build(),
-                AuthUI.IdpConfig.GoogleBuilder().build()
-            )
-
-            startActivityForResult(
-                AuthUI.getInstance()
-                    .createSignInIntentBuilder()
-                    .setAvailableProviders(providers)
-                    .setLogo(R.drawable.ic_user_login_default)
-                    .build(), 0
-            )
+            callLogin()
         } else {
-            configureDatabase()
+            configureFirebase()
         }
+    }
+
+    private fun logOut() {
+        if (getCurrentUser() != null) {
+            AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener {
+                    Toast.makeText(this, "saiu", Toast.LENGTH_LONG).show()
+                }
+        }
+
+        callLogin()
     }
 
     private fun getCurrentUser(): FirebaseUser? {
@@ -178,7 +194,7 @@ class HomeListActivity : AppCompatActivity() {
         return auth.currentUser
     }
 
-    private fun configureDatabase() {
+    private fun configureFirebase() {
         val user = getCurrentUser()
 
         user?.let {
@@ -251,7 +267,7 @@ class HomeListActivity : AppCompatActivity() {
 
             productCard.txtProductName.text = order.productName
             productCard.txtPrice.text = formatter.format(order.unitPrice)
-            productCard.txtCategoria.text = order.categoryName
+            productCard.txtCategory.text = order.categoryName
 
             try {
                 val id: Int = this.resources.getIdentifier(order.imageName, "drawable", this.packageName)
@@ -269,12 +285,12 @@ class HomeListActivity : AppCompatActivity() {
                     }
                 } else {
                     AlertDialog.Builder(this)
-                        .setTitle("Esta produto já se encontra no carrinho")
-                        .setNegativeButton("ir para o carrinho") { _, _ ->
+                        .setTitle(getString(R.string.onCart))
+                        .setNegativeButton(getString(R.string.goToCart)) { _, _ ->
                             val intent = Intent(this, CartActivity::class.java)
                             startActivity(intent)
                         }
-                        .setPositiveButton("ok", null)
+                        .setPositiveButton(getString(R.string.ok), null)
                         .create()
                         .show()
                 }

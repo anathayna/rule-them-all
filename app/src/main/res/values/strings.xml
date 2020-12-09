@@ -1,11 +1,25 @@
 <resources>
     <string name="app_name">Rule Them All</string>
-    <string name="product_name">Nome do produto</string>
-    <string name="price">Preço</string>
-    <string name="carrinho">carrinho</string>
-    <string name="nome_do_produto">Nome do produto</string>
-    <string name="qnt">qnt:</string>
+    <string name="nome_do_produto" translatable="false">Nome do produto</string>
+    <string name="price" translatable="false">Preço</string>
+    <string name="carrinho" translatable="false">carrinho</string>
+    <string name="qnt" translatable="false">qnt:</string>
     <string name="meus_pedidos">meus pedidos</string>
     <string name="sair">sair</string>
     <string name="sobre">sobre</string>
+    <string name="productList">Lista de produtos</string>
+    <string name="searchHint">buscar por nome</string>
+    <string name="category">Categoria: </string>
+    <string name="onCart">Este produto já se encontra no carrinho</string>
+    <string name="goToCart">ir para o carrinho</string>
+    <string name="ok">ok</string>
+    <string name="product">Produto</string>
+    <string name="addToCart">Deseja adicionar este produto ao carrinho?</string>
+    <string name="cancel">Cancelar</string>
+    <string name="yes">sim</string>
+    <string name="checkout">Carrinho</string>
+    <string name="buy">COMPRAR</string>
+    <string name="buyOK">compra realizada</string>
+    <string name="totalOrder">total do pedido: </string>
+    <string name="dueDate">data da compra: </string>
 </resources>

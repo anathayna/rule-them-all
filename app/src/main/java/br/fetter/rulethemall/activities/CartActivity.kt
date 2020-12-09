@@ -29,7 +29,7 @@ class CartActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportActionBar?.title = "Carrinho"
+        supportActionBar?.title = getString(R.string.checkout)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setContentView(R.layout.activity_cart)
         DatabaseHelper(this)
@@ -60,11 +60,12 @@ class CartActivity : AppCompatActivity() {
     private  fun updateScreen(productCartList: List<Order>) {
         container.removeAllViews()
         val totalOrder = getTotalOrderPrice(productCartList)
-        txtTotalOrder.text = "total do pedido:  $totalOrder"
+        txtTotalOrder.text = "${getString(R.string.totalOrder)} $totalOrder"
 
         for (product in productCartList) {
             val card = layoutInflater.inflate(R.layout.product_card_cart, container, false)
             card.txtCartProductName.text = product.productName
+            card.txtCategory.text = product.categoryName
             val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, list_of_items)
             aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             card.spinner_product.adapter = aa
@@ -137,7 +138,7 @@ class CartActivity : AppCompatActivity() {
         Thread {
             DatabaseHelper.deleteProducts(products)
             runOnUiThread {
-                Toast.makeText(this, "Compra realizada com sucesso", Toast.LENGTH_LONG)
+                Toast.makeText(this, getString(R.string.buyOK), Toast.LENGTH_LONG)
                     .show()
                 val i = Intent(this, HomeListActivity::class.java)
                 startActivity(i)
