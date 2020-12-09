@@ -50,8 +50,8 @@ class AboutActivity : AppCompatActivity() {
             startActivity(shareIntent)
         } else if (id == 2) {
             val sendIntent: Intent = Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_EMAIL, "fetter.marcio@gmail.com")
+                action = Intent.ACTION_SENDTO
+                putExtra(action, "fetter.marcio@gmail.com")
                 putExtra(Intent.EXTRA_SUBJECT, "Tenho uma sugestão para o app")
                 type = "text/plain"
             }
@@ -59,7 +59,7 @@ class AboutActivity : AppCompatActivity() {
             startActivity(shareIntent)
         } else {
             val sendIntent: Intent = Intent().apply {
-                action = Intent.ACTION_SEND
+                action = Intent.ACTION_SENDTO
                 putExtra(Intent.EXTRA_EMAIL, "mathias21novaes@gmail.com")
                 putExtra(Intent.EXTRA_SUBJECT, "Tenho uma sugestão para o app")
                 type = "text/plain"
