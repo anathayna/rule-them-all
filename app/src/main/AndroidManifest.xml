@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_app"
@@ -12,12 +11,14 @@
         android:roundIcon="@drawable/ic_app"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.LastOrdersActivity"></activity>
+        <activity android:name=".activities.AboutActivity"></activity>
+        <activity android:name=".activities.LastOrdersActivity" />
         <activity android:name=".activities.StoreActivity" />
         <activity android:name=".activities.CartActivity" />
         <activity android:name=".activities.HomeListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

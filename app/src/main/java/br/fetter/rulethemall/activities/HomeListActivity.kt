@@ -79,6 +79,9 @@ class HomeListActivity : AppCompatActivity() {
             val intent = Intent(this, LastOrdersActivity::class.java)
             startActivity(intent)
             return true
+        } else if (item.itemId == R.id.menuAbout) {
+            val intent = Intent(this, AboutActivity::class.java)
+            startActivity(intent)
         } else if (item.itemId == R.id.menuLogout) {
             logOut()
             return true
@@ -142,7 +145,9 @@ class HomeListActivity : AppCompatActivity() {
     private fun configureDataBase() {
         Thread {
             val values = DatabaseHelper.getHomeList()
-            DatabaseHelper.deleteProducts(values)
+            if (!values.isNullOrEmpty()) {
+                DatabaseHelper.deleteProducts(values)
+            }
             runOnUiThread {
                 verifyUser()
             }

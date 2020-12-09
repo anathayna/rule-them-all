@@ -19,4 +19,7 @@
     <string name="buyOK">purchase made</string>
     <string name="totalOrder">total order: </string>
     <string name="dueDate">purchase date: </string>
+    <string name="about_text">Project developed to evaluate the discipline: Programming of Mobile Devices taught by Fábio Abeza - 6 Semester of the Computer Science course</string>
+    <string name="app_desenvolvido_por">App developed by:</string>
+    <string name="acesse_o_senac">ACCESS SENAC</string>
 </resources>
