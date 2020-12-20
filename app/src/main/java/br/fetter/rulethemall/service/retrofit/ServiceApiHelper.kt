@@ -14,7 +14,7 @@ class ServiceApiHelper {
 
     companion object {
 
-        private const val apiPath = "802759342ec340619d7d3c5220a58434"
+        private const val apiPath = "6746e9cb913943bda6a6ff72f5e75418"
 
         fun getProducts(userUid: String, myCallback: (result: List<ListOrders>?, error: String?) -> Unit) {
             val clienteHttp = OkHttpClient.Builder()
